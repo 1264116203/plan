@@ -1,18 +1,25 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <h1>
+    <calculate/>
+    <map-model/>
+  </h1>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import calculate from './components/calculate.vue'
+import MapModel from './components/map-model.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    calculate,
+    MapModel
+  },
+  created () {
+    document.title=" 5G高铁精准规划辅助工具"
   }
+
 }
 </script>
 
