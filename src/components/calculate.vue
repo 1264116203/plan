@@ -1,38 +1,24 @@
 <template>
   <div>
-    <a-form-model :model="form" :label-col="{ span: 2 }" :wrapper-col="{ span: 6 }">
-      <a-form-model-item label="4G小区信息表">
-        <a-upload
-            v-model="uploadFile"
-            :accept="accept"
-            :file-list="fileList"
-            :before-upload="beforeUpload"
-            :remove="remove"
-        >
-          <a-button>
-            <a-icon type="upload" />
-            点击上传
-          </a-button>
-        </a-upload>
-      </a-form-model-item>
-      <a-form-model-item label="省份" >
+    <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="{ span: 2 }" :wrapper-col="{ span: 6 }">
+      <a-form-model-item label="省份" prop="province" >
         <a-select v-model="form.province" placeholder="请选择省份">
           <a-select-option :value="item" v-for="(item,index) in provinces" :key="index">
             {{item}}
           </a-select-option>
         </a-select>
       </a-form-model-item>
-      <a-form-model-item label="年度">
+      <a-form-model-item label="年度" prop="year">
         <a-select v-model="form.year" :default-value="years[0].value" placeholder="请选择年度">
           <a-select-option :value="item.value" v-for="(item,index) in years" :key="index" >
             {{ item.label }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
-      <a-form-model-item label="流量增长倍数">
+      <a-form-model-item label="流量增长倍数" prop="TrafficGrowthMult">
         <a-input v-model="form.TrafficGrowthMult" placeholder="请填写流量增长倍数（%）" />
       </a-form-model-item>
-      <a-form-model-item>
+      <a-form-model-item label="4G小区信息表">
       <a-space>
         <a-upload
             v-model="uploadFile"
@@ -112,6 +98,11 @@ export default {
         year: undefined,
         TrafficGrowthMult: 0
       },
+      rules:{
+      province: [{ required: true, message: '请选择省份', trigger: ['change','blur'] }],
+      year: [{ required: true, message: '请选择年度', trigger: ['change','blur'] }],
+      TrafficGrowthMult: [{ required: true, message: '请填写流量增长倍数', trigger: ['change','blur'] }],
+      },
       columns: [
         {
           title: '省份',
@@ -184,6 +175,8 @@ export default {
       }
       // 返回false则不执行上传操作
       return false
+
+
     },
     /** 移除文件时的回调函数 */
     remove() {
@@ -194,7 +187,13 @@ export default {
 
     /** 计算 */
     calculate() {
-
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          console.log("通过校验")
+        } else {
+          return false;
+        }
+      });
 
 
 
@@ -211,6 +210,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .ant-form{
-  margin: 0 20px 0;
+  margin: 20px;
 }
 </style>
