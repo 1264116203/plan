@@ -94,7 +94,7 @@ export default {
       form: {
         province: undefined,
         year: undefined,
-        TrafficGrowthMult: 0
+        TrafficGrowthMult: 0.1
       },
       rules: {
         province: [{ required: true, message: '请选择省份', trigger: ['change', 'blur'] }],
@@ -154,7 +154,16 @@ export default {
             for (const sheetName of workbook.SheetNames) {
               switch (sheetName) {
                 case '基本信息表':
-                  this.baseInfoSheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName])
+                  // this.baseInfoSheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName])
+                  this.baseInfoSheetData = this.baseInfoSheetData.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheetName],
+                      {
+                        header: [
+                          'b', 'c', 'd', 'e', 'f', 'g', 'h',
+                          'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+                          'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                          'aa', 'ab'
+                        ]
+                      }))
                   break
                 case '测试数据':
                   this.testSheetData = this.testSheetData.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheetName],
@@ -170,8 +179,6 @@ export default {
               }
 
             }
-            console.log('基本信息表', this.baseInfoSheetData)
-            console.log('测试数据', this.testSheetData)
           } catch (e) {
             return false
           }
@@ -192,6 +199,7 @@ export default {
 
     /** 计算 */
     calculate() {
+      const _this = this
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           console.log('通过校验')
@@ -206,7 +214,6 @@ export default {
             if (!provinceLineFlowSumMap.has(item.f)) {
               provinceLineFlowSumMap.set(item.f, item)
             } else {
-              debugger
               let newVar = provinceLineFlowSumMap.get(item.f)
               newVar.ab = parseFloat(newVar.ab)
               newVar.ab += parseFloat(item.ab)
@@ -216,6 +223,18 @@ export default {
           })
           console.log('provinceLineFlowSumMap:', provinceLineFlowSumMap)
 
+          provinceLineFlowSumMap.forEach((value, key) => {
+            this.baseInfoSheetData.shift()
+            this.baseInfoSheetData.shift()
+            this.baseInfoSheetData.shift()
+            let lengthNum = this.baseInfoSheetData.filter(item => {
+              // return item.g === this.form.province&& this.form.year ===item.i && item.f === key
+              return item.h === value.c && item.f === key
+            })[0].k
+            console.log('lengthNum:', lengthNum)
+            const flow = (value.ab / lengthNum) * (1 + _this.form.TrafficGrowthMult)
+             console.log('flow:', flow)
+          })
 
         } else {
           return false
