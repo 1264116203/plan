@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="{ span: 2 }" :wrapper-col="{ span: 6 }">
+    <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="{ span: 4 }" :wrapper-col="{ span: 6 }">
       <a-form-model-item label="省份" prop="province">
         <a-select v-model="form.province" placeholder="请选择省份">
           <a-select-option :value="item" v-for="(item,index) in provinces" :key="index">
@@ -17,6 +17,15 @@
       </a-form-model-item>
       <a-form-model-item label="流量增长倍数" prop="TrafficGrowthMult">
         <a-input v-model="form.TrafficGrowthMult" placeholder="请填写流量增长倍数（%）" />
+      </a-form-model-item>
+      <a-form-model-item label="700MHz最小建设阈值（GB）" prop="LowBandMin">
+        <a-input v-model="form.LowBandMin" placeholder="请填写700MHz最小建设阈值（GB）" />
+      </a-form-model-item>
+      <a-form-model-item label="700MHz最大建设阈值（GB）" prop="LowBandMax">
+        <a-input v-model="form.LowBandMax" placeholder="请填写700MHz最大建设阈值（GB）" />
+      </a-form-model-item>
+      <a-form-model-item label="2.6GHz最小建设阈值（GB）" prop="HignBandMin">
+        <a-input v-model="form.HignBandMin" placeholder="请填写2.6GHz最小建设阈值（GB）" />
       </a-form-model-item>
       <a-form-model-item label="4G小区信息表">
         <a-space>
@@ -94,7 +103,10 @@ export default {
       form: {
         province: undefined,
         year: undefined,
-        TrafficGrowthMult: 0.1
+        TrafficGrowthMult: 0.1,
+        LowBandMin:0,
+        LowBandMax:0,
+        HignBandMin:0,
       },
       rules: {
         province: [{ required: true, message: '请选择省份', trigger: ['change', 'blur'] }],
