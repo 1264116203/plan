@@ -60,7 +60,7 @@ export default {
       /** 上传的文件列表 */
       fileList: [],
       /** 省份 */
-      provinces: [],
+      provinces: ['黑龙江','辽宁','吉林','河北','山西','陕西','山东','江苏','浙江','河南','湖北','安徽','湖南','江西','云南','海南','四川','台湾','贵州','广东','甘肃','青海','福建'],
       defaultValue:"2022",
       /** 年份 */
       years: [
@@ -93,12 +93,10 @@ export default {
       baseInfoSheetData: [],
       /** 竞对信息表数据 */
       rivalInfoSheetData: [],
-      /** 业务预测表数据 */
-      serviceForecastSheetData: [],
       form: {
         province: undefined,
         year: undefined,
-        TrafficGrowthMult: null
+        TrafficGrowthMult: 0
       },
       columns: [
         {
@@ -149,9 +147,6 @@ export default {
             })
             for (const sheetName of workbook.SheetNames) {
               switch (sheetName) {
-                case '业务预测':
-                  this.serviceForecastSheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName])
-                  break
                 case '基本信息表':
                   this.baseInfoSheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName])
                   break
@@ -164,18 +159,9 @@ export default {
               }
 
             }
-            console.log('业务预测', this.serviceForecastSheetData)
             console.log('基本信息表', this.baseInfoSheetData)
             console.log('测试数据', this.testSheetData)
             console.log('竞对信息', this.rivalInfoSheetData)
-            let provinces= new Set()
-            this.testSheetData.map(item => {
-              console.log('item:', item.省份)
-              provinces.add(item.省份)
-
-            })
-            this.provinces = Array.from(provinces)
-            console.log(' Array.from(this.provinces):', Array.from(this.provinces))
           } catch (e) {
             return false
           }
@@ -194,7 +180,11 @@ export default {
 
     /** 计算 */
     calculate() {
-      console.log('计算')
+
+
+
+
+
     },
     /** 导出数据 */
     exportData() {
