@@ -32,7 +32,20 @@
       <a-form-model-item label="流量增长倍数">
         <a-input v-model="form.TrafficGrowthMult" placeholder="请填写流量增长倍数（%）" />
       </a-form-model-item>
+      <a-form-model-item>
       <a-space>
+        <a-upload
+            v-model="uploadFile"
+            :accept="accept"
+            :file-list="fileList"
+            :before-upload="beforeUpload"
+            :remove="remove"
+        >
+          <a-button>
+            <a-icon type="upload" />
+            点击上传
+          </a-button>
+        </a-upload>
         <a-button type="primary" @click="calculate">
           计算
         </a-button>
@@ -40,6 +53,7 @@
           导出
         </a-button>
       </a-space>
+      </a-form-model-item>
     </a-form-model>
     <a-table :columns="columns" :data-source="data">
 
@@ -196,5 +210,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.ant-form{
+  margin: 0 20px 0;
+}
 </style>
